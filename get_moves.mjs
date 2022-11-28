@@ -1,7 +1,6 @@
 import jsdom from "jsdom";
 const JSDOM = jsdom.JSDOM;
-
-export const types = ["bug", "dark", "dragon", "electric", "fairy", "fighting", "fire", "flying", "ghost", "grass", "ground", "ice", "normal", "poison", "psychict", "rock", "steel", "water"];
+import {types} from "./util.mjs";
 
 export class MoveCount {
     constructor(typeIn, physIn, specIn, physCountIn, specCountIn) {
@@ -17,16 +16,12 @@ export async function get_move_data(type)
 {
     var physicalSum = 0, physicalCount = 0, specialSum = 0, specialCount = 0;
     const url = `https://www.serebii.net/attackdex-swsh/${type}.shtml`;
-    //console.log("URL:");
     console.log("Fetching from " + url);
     const resp = await fetch(url);
     const html = await resp.text();
-    //console.log(html);
     const doc = new JSDOM(html);
     const tables = doc.window.document.getElementsByClassName("dextable");
     const table = tables[0];
-    //console.log(table.innerHTML);
-    //console.log(table.getElementsByTagName("tbody")[0].children.length);
     const rows = Array.prototype.slice.call(table.getElementsByTagName("tbody")[0].children, 1);
     for(const row of rows) {
 	const cells = row.getElementsByTagName("td");
@@ -45,7 +40,6 @@ export async function get_move_data(type)
 		    specialSum += effectiveness;
 		    specialCount++;
 		}
-		//console.log(`${attackName} ${category} ${effectiveness}`);
 	    }
 	}
     }

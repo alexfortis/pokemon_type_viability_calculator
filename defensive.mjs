@@ -1,4 +1,5 @@
-import {types, MoveCount, get_move_data} from "./get_moves.mjs";
+import {MoveCount, get_move_data} from "./get_moves.mjs";
+import {types} from "./util.mjs";
 
 var offensiveTypeData = [];
 
