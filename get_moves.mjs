@@ -1,9 +1,9 @@
-const jsdom = require("jsdom");
-const {JSDOM} = jsdom;
+import jsdom from "jsdom";
+const JSDOM = jsdom.JSDOM;
 
-const types = ["bug", "dark", "dragon", "electric", "fairy", "fighting", "fire", "flying", "ghost", "grass", "ground", "ice", "normal", "poison", "psychict", "rock", "steel", "water"];
+export const types = ["bug", "dark", "dragon", "electric", "fairy", "fighting", "fire", "flying", "ghost", "grass", "ground", "ice", "normal", "poison", "psychict", "rock", "steel", "water"];
 
-class MoveCount {
+export class MoveCount {
     constructor(typeIn, physIn, specIn, physCountIn, specCountIn) {
 	this.type = typeIn;
 	this.physical = physIn;
@@ -13,9 +13,7 @@ class MoveCount {
     }
 }
 
-var AllMoveTypes = [];
-
-async function get_move_data(type)
+export async function get_move_data(type)
 {
     var physicalSum = 0, physicalCount = 0, specialSum = 0, specialCount = 0;
     const url = `https://www.serebii.net/attackdex-swsh/${type}.shtml`;
@@ -51,9 +49,5 @@ async function get_move_data(type)
 	    }
 	}
     }
-    AllMoveTypes.push(new MoveCount(type, physicalSum / physicalCount, specialSum / specialCount, physicalCount, specialCount));
+    return new MoveCount(type, physicalSum / physicalCount, specialSum / specialCount, physicalCount, specialCount);
 }
-
-Promise.all(types.map(get_move_data)).then((values) => {
-    console.log(AllMoveTypes);
-});
