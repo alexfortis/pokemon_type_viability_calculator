@@ -1,4 +1,4 @@
-import {types, pad} from "./util.mjs";
+import util from "./util.mjs";
 import jsdom from "jsdom";
 const JSDOM = jsdom.JSDOM;
 const url = "https://www.serebii.net/pokemon/nationalpokedex.shtml";
@@ -125,10 +125,10 @@ export async function get_mons() {
     var regionalForms = {};
     //check the gen 7 and gen 8 pages for alternate forms
     for(const mon of mons) {
-	console.log(`Fetching data for #${pad(mon.num, 3)} ${mon.name}`);
+	console.log(`Fetching data for #${util.pad(mon.num, 3)} ${mon.name}`);
 	//gen 7
 	if(mon.num < 810) {
-	    const gen7_url = "https://www.serebii.net/pokedex-sm/" + pad(mon.num, 3) + ".shtml";
+	    const gen7_url = "https://www.serebii.net/pokedex-sm/" + util.pad(mon.num, 3) + ".shtml";
 	    const gen7_resp = await fetch(gen7_url);
 	    if(gen7_resp.status === 200) {
 		const gen7_doc = new JSDOM(await gen7_resp.text());

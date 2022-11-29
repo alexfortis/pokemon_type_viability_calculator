@@ -7,3 +7,9 @@ export function pad(num, digits) {
     }
     return str;
 }
+
+export function type_graph() {
+    
+}
+
+export default {types, pad, type_graph};

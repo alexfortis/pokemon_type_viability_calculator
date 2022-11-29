@@ -1,6 +1,6 @@
 import jsdom from "jsdom";
 const JSDOM = jsdom.JSDOM;
-import {types} from "./util.mjs";
+import util from "./util.mjs";
 
 export class MoveCount {
     constructor(typeIn, physIn, specIn, physCountIn, specCountIn) {
