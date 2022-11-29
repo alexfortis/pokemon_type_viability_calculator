@@ -54,49 +54,63 @@ function parse_mon_data(table_row) {
 function get_alt_forms(num, pkmn_name, doc, regForms) {
     const form_names_types = {};
     const form_names_stat_tables = {};
-    var defaultTable;
+    var defaultTable = null;
+    var typesTable = null;
+    var statsTables = [];
     const tables = doc.window.document.getElementsByClassName("dextable");
     for(const table of tables) {
 	const tds = table.getElementsByTagName("td");
 	if(tds[4] && tds[4].innerHTML === "Type") {
-	    const formsTable = table.getElementsByClassName("cen")[0].getElementsByTagName("table")[0];
-	    if(formsTable) {
-		const forms = Array.prototype.slice.call(formsTable.getElementsByTagName("tr"), 1);
-		for(const form of forms) {
-		    const cells = form.getElementsByTagName("td");
-		    const formName = cells[0].innerHTML;
-		    if(formName !== "Zen Mode") {
-			const formTypes = Array.prototype.map.call(cells[1].children, a => a.getAttribute("href").slice(a.getAttribute("href").lastIndexOf("/")+1, -6));
-			form_names_types[formName] = formTypes;
-		    }
-		}
-	    }
+	    typesTable = table.getElementsByClassName("cen")[0].getElementsByTagName("table")[0];
 	}
 	else if(tds[0]) {
 	    const h2 = tds[0].getElementsByTagName("h2")[0];
 	    if(h2) {
-		if(h2.innerHTML === "Stats") {
-		    defaultTable = table;
-		}
-		else if(h2.innerHTML.startsWith("Stats")) {
-		    for(const name in form_names_types) {
-			if(h2.innerHTML.startsWith("Stats - " + name.replace("_", " ")) || h2.innerHTML === "Stats - Alternate Forms") {
-			    if(!name in form_names_stat_tables) {
-				form_names_stat_tables[name] = table;
-			    }
-			}
+		if(h2.innerHTML.startsWith("Stats")) {
+		    const baseStats = Array.prototype.slice.call(table.getElementsByTagName("tr")[2].getElementsByTagName("td"), 1).map(x => x.innerHTML);
+		    const stats_table = {
+			title: h2.innerHTML,
+			hp: baseStats[0],
+			atk: baseStats[1],
+			def: baseStats[2],
+			satk: baseStats[3],
+			sdef: baseStats[4],
+			spe: baseStats[5]
+		    };
+		    if(h2.innerHTML === "Stats") {
+			defaultTable = stats_table;
 		    }
+		    statsTables.push(stats_table);
 		}
 	    }
 	}
     }
-    for(const name in form_names_types) {
-	if(!(name in form_names_stat_tables)) {
-	    form_names_stat_tables[name] = defaultTable;
+    //now get the types of each form
+    if(typesTable) {
+	const forms = Array.prototype.slice.call(typesTable.getElementsByTagName("tr"), 1);
+	for(const form of forms) {
+	    const cells = form.getElementsByTagName("td");
+	    const formName = cells[0].innerHTML;
+	    if(formName !== "Zen Mode") {
+		const formTypes = Array.prototype.map.call(cells[1].children, a => a.getAttribute("href").slice(a.getAttribute("href").lastIndexOf("/")+1, -6));
+		form_names_types[formName] = formTypes;
+	    }
 	}
-	const baseStats = Array.prototype.slice.call(form_names_stat_tables[name].getElementsByTagName("tr")[2].getElementsByTagName("td"), 1).map(x => x.innerHTML);
+    }
+    //and get the table for the stats for each form
+    for(const name in form_names_types) {
+	form_names_stat_tables[name] = defaultTable;
+	for(const table of statsTables) {
+	    if(table.title === `Stats - ${name} ${pkmn_name}` || table.title === `Stats - ${name}` || table.title === `Stats - ${pkmn_name} ${name}`) {
+		form_names_stat_tables[name] = table;
+	    }
+	}
+    }
+    //finally, get the actual stats for each form
+    for(const name in form_names_types) {
 	const form_name = pkmn_name + "_-_" + name.replace(" ", "_");
-	regForms[form_name] = new MonData(num, form_name, form_names_types[name][0], form_names_types[name][1], baseStats[0], baseStats[1], baseStats[2], baseStats[3], baseStats[4], baseStats[5]);
+	const table = form_names_stat_tables[name];
+	regForms[form_name] = new MonData(num, form_name, form_names_types[name][0], form_names_types[name][1], table.hp, table.atk, table.def, table.satk, table.sdef, table.spe);
     }
 }
 
@@ -115,7 +129,6 @@ export async function get_mons() {
 	//gen 7
 	if(mon.num < 810) {
 	    const gen7_url = "https://www.serebii.net/pokedex-sm/" + pad(mon.num, 3) + ".shtml";
-	    //console.log(`Fetching gen 7 data for #${mon.num} ${mon.name} from ${gen7_url}`);
 	    const gen7_resp = await fetch(gen7_url);
 	    if(gen7_resp.status === 200) {
 		const gen7_doc = new JSDOM(await gen7_resp.text());
@@ -124,7 +137,6 @@ export async function get_mons() {
 	}
 	//gen 8
 	const gen8_url = "https://www.serebii.net/pokedex-swsh/" + mon.name.toLowerCase();
-	//console.log(`Fetching gen 8 data for #${mon.num} ${mon.name} from ${gen8_url}`);
 	const gen8_resp = await fetch(gen8_url);
 	if(gen8_resp.status === 200) {
 	    const gen8_doc = new JSDOM(await gen8_resp.text());
