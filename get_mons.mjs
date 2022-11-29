@@ -35,7 +35,7 @@ export function isTypes(mon, type1, type2) {
 function parse_mon_data(table_row) {
     const cells = table_row.children;
     const monNum = parseInt(cells[0].innerHTML.trim().slice(1));
-    const monName = cells[2].getElementsByTagName("a")[0].innerHTML;
+    const monName = cells[2].getElementsByTagName("a")[0].innerHTML.replace(" ", "_");
     const monTypes = Array.prototype.map.call(cells[3].getElementsByTagName("a"), (a) => {
 	if(a) {
 	    return a.getAttribute("href").slice(14);
@@ -136,7 +136,7 @@ export async function get_mons() {
 	    }
 	}
 	//gen 8
-	const gen8_url = "https://www.serebii.net/pokedex-swsh/" + mon.name.toLowerCase();
+	const gen8_url = "https://www.serebii.net/pokedex-swsh/" + mon.name.toLowerCase().replace("_","");
 	const gen8_resp = await fetch(gen8_url);
 	if(gen8_resp.status === 200) {
 	    const gen8_doc = new JSDOM(await gen8_resp.text());
@@ -151,6 +151,4 @@ export async function get_mons() {
     return mons;
 }
 
-get_mons().then(mons => {
-    mons.forEach(mon => console.log(mon.toString()));
-});
+export default {MonData, isType, isTypes, get_mons};

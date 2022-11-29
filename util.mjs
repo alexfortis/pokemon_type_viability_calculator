@@ -108,7 +108,7 @@ export function type_graph() {
 }
 /*
 Adjacency list entry format:
-type : {off, def}
+type : {def, off}
 */
 export function type_adjlist() {
     const graph = type_graph();
@@ -136,6 +136,10 @@ export function type_adjlist() {
     return adjlist;
 }
 
-export default {types, pad, type_graph, type_adjlist};
+export function avg(arr) {
+    return arr.reduce((a,b)=>a+b, 0)/arr.length;
+}
+
+export default {types, pad, type_graph, type_adjlist, avg};
 
 console.log(type_adjlist());
