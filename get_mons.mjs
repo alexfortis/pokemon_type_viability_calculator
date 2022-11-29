@@ -66,7 +66,7 @@ function get_alt_forms(num, pkmn_name, doc, regForms) {
 		    const cells = form.getElementsByTagName("td");
 		    const formName = cells[0].innerHTML;
 		    if(formName !== "Zen Mode") {
-			const formTypes = Array.prototype.map.call(cells[1].children, a => a.getAttribute("href").slice(14, -6));
+			const formTypes = Array.prototype.map.call(cells[1].children, a => a.getAttribute("href").slice(a.getAttribute("href").lastIndexOf("/")+1, -6));
 			form_names_types[formName] = formTypes;
 		    }
 		}
@@ -80,7 +80,7 @@ function get_alt_forms(num, pkmn_name, doc, regForms) {
 		}
 		else if(h2.innerHTML.startsWith("Stats")) {
 		    for(const name in form_names_types) {
-			if(h2.innerHTML.startsWith("Stats - " + form_names_types[name]) || h2.innerHTML === "Stats - Alternate Forms") {
+			if(h2.innerHTML.startsWith("Stats - " + name.replace("_", " ")) || h2.innerHTML === "Stats - Alternate Forms") {
 			    if(!name in form_names_stat_tables) {
 				form_names_stat_tables[name] = table;
 			    }
@@ -109,27 +109,28 @@ export async function get_mons() {
     const rows = Array.prototype.slice.call(table.getElementsByTagName("tbody")[0].children, 2);
     const mons = rows.map(parse_mon_data);
     var regionalForms = {};
-    //check the gen 8 page for alternate forms
+    //check the gen 7 and gen 8 pages for alternate forms
     for(const mon of mons) {
+	console.log(`Fetching data for #${pad(mon.num, 3)} ${mon.name}`);
+	//gen 7
 	if(mon.num < 810) {
-	    const gen7_url = "https://www.serebii.net/pokedex-sm/" + pad(mon.num) + ".shtml";
-	    console.log(`Fetching gen 7 data for #${mon.num} ${mon.name} from ${gen7_url}`);
+	    const gen7_url = "https://www.serebii.net/pokedex-sm/" + pad(mon.num, 3) + ".shtml";
+	    //console.log(`Fetching gen 7 data for #${mon.num} ${mon.name} from ${gen7_url}`);
 	    const gen7_resp = await fetch(gen7_url);
-	    if(gen7_resp === 200) {
+	    if(gen7_resp.status === 200) {
 		const gen7_doc = new JSDOM(await gen7_resp.text());
 		get_alt_forms(mon.num, mon.name, gen7_doc, regionalForms);
 	    }
 	}
+	//gen 8
 	const gen8_url = "https://www.serebii.net/pokedex-swsh/" + mon.name.toLowerCase();
-	console.log(`Fetching gen 8 data for #${mon.num} ${mon.name} from ${gen8_url}`);
+	//console.log(`Fetching gen 8 data for #${mon.num} ${mon.name} from ${gen8_url}`);
 	const gen8_resp = await fetch(gen8_url);
 	if(gen8_resp.status === 200) {
 	    const gen8_doc = new JSDOM(await gen8_resp.text());
 	    get_alt_forms(mon.num, mon.name, gen8_doc, regionalForms);
 	}
     }
-    console.log(regionalForms);
-    //check the gen 7 page for alternate forms
     //and finally add the alternate forms to the list
     for(const formName in regionalForms) {
 	mons.push(regionalForms[formName]);
