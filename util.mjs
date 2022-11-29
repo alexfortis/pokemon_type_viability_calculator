@@ -141,5 +141,3 @@ export function avg(arr) {
 }
 
 export default {types, pad, type_graph, type_adjlist, avg};
-
-console.log(type_adjlist());
