@@ -106,5 +106,36 @@ export function type_graph() {
 
     return graph;
 }
+/*
+Adjacency list entry format:
+type : {off, def}
+*/
+export function type_adjlist() {
+    const graph = type_graph();
+    const adjlist = {};
+    for(const type of types) {
+	adjlist[type] = {};
+	for(const type2 of types) {
+	    adjlist[type][type2] = {def: 1, off: 1};
+	}
+    }
+    for(const type of types) {
+	for(const type2 of graph[type].double_offensive) {
+	    adjlist[type][type2].off = 2;
+	    adjlist[type2][type].def = 2;
+	}
+	for(const type2 of graph[type].half_offensive) {
+	    adjlist[type][type2].off = 0.5;
+	    adjlist[type2][type].def = 0.5;
+	}
+	for(const type2 of graph[type].immune_offensive) {
+	    adjlist[type][type2].off = 0;
+	    adjlist[type2][type].def = 0;
+	}
+    }
+    return adjlist;
+}
 
-export default {types, pad, type_graph};
+export default {types, pad, type_graph, type_adjlist};
+
+console.log(type_adjlist());
