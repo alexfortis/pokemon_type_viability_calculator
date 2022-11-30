@@ -19,6 +19,7 @@ Promise.all(util.types.map(get_move_data)).then((moves) => {
 	    const avg_spec_atk = util.avg(mons_of_type.map(mon => parseInt(mon.satt)));
 	    avg_atks[type] = {p: avg_phys_atk, s: avg_spec_atk};
 	}
+	console.log(avg_atks);
 	var content = "type,def_score";
 	for(let i = 0; i < util.types.length; i++) {
 	    const ti = util.types[i];
@@ -42,7 +43,7 @@ Promise.all(util.types.map(get_move_data)).then((moves) => {
 				const def_score_mt = e * (mt.physical * mt.physicalCount * avg_atks[mt.type].p + mt.special * mt.specialCount * avg_atks[mt.type].s) / (mt.physicalCount + mt.specialCount);
 				const e2 = single_type_graph[ti][mt2.type].def * (i === j)?(1):(single_type_graph[tj][mt2.type].def);
 				const def_score_mt2 = e2 * (mt2.physical * mt2.physicalCount * avg_atks[mt2.type].p + mt2.special * mt2.specialCount * avg_atks[mt2.type].s) / (mt2.physicalCount + mt2.specialCount);
-				def_score = (def_score_mt + def_score_mt2) / 2;
+				def_score = (def_score_mt > def_score_mt2)?(def_score_mt):(def_score_mt2);
 			    }
 			    matchups[mts_as_str] = def_score;
 			    totalScore += def_score;

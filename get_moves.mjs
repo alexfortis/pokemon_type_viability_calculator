@@ -45,3 +45,6 @@ export async function get_move_data(type)
     }
     return new MoveCount(type, physicalSum / physicalCount, specialSum / specialCount, physicalCount, specialCount);
 }
+
+//used for testing only
+//Promise.all(util.types.map(get_move_data)).then(console.log);
