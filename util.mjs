@@ -140,7 +140,17 @@ export function avg(arr) {
     return arr.reduce((a,b)=>a+b, 0)/arr.length;
 }
 
-export default {types, pad, type_graph, type_adjlist, avg};
+export function min(...args) {
+    if(0 === args.length) return undefined;
+    return args.reduce((a,b)=>(a<b)?(a):(b));
+}
+
+export function max(...args) {
+    if(0 === args.length) return undefined;
+    return args.reduce((a,b)=>(a<b)?(b):(a));
+}
+
+export default {types, pad, type_graph, type_adjlist, avg, min, max};
 
 //for testing only
 //console.log(type_adjlist());
