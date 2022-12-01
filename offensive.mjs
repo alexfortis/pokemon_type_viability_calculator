@@ -10,6 +10,7 @@ Promise.all(util.types.map(get_move_data)).then((moves) => {
     get_mons.get_mons().then(mons => {
 	var content = "type,off_score";
 	const pkmn_count_by_type = {};
+	const all_types = [];
 	//entry format: {p, s, c}
 	const avg_defs = {};
 	//get the average physical/special defense of each type
@@ -21,11 +22,13 @@ Promise.all(util.types.map(get_move_data)).then((moves) => {
 	    avg_defs[type_i] = {p: util.avg(mons_i.map(mon => parseInt(mon.def))), s: util.avg(mons_i.map(mon => parseInt(mon.sdef))), c: mons_i.length};
 	    console.log(`Count of ${type_i}-type pokemon: ${mons_i.length}`);
 	    pkmn_count_by_type[type_i] = mons_i.length;
+	    all_types.push(type_i);
 	    content += `,${type_i}`;
 	    for(let j = i+1; j < util.types.length; j++) {
 		const type_j = util.types[j];
 		const _type_j = (util.types[j] === "psychict")?("psychic"):(util.types[j]);
 		const type_ij = `${type_i}/${type_j}`;
+		all_types.push(type_ij);
 		const mons_ij = mons.filter(mon => get_mons.isTypes(mon, _type_i, _type_j));
 		console.log(`Count of ${type_ij}-type pokemon: ${mons_ij.length}`);
 		pkmn_count_by_type[type_ij] = mons_ij.length;
@@ -38,6 +41,8 @@ Promise.all(util.types.map(get_move_data)).then((moves) => {
 		}
 	    }
 	}
+	const lines = [];
+	const totalScores = [];
 	console.log(pkmn_count_by_type);
 	//console.log(avg_defs);
 	//now, compute the expected effectiveness of each type on each other type
@@ -79,15 +84,23 @@ Promise.all(util.types.map(get_move_data)).then((moves) => {
 			totalScore += off_score;
 		    }
 		}
-		content += `\n${atk_type_str},${totalScore*5000}`;
+		var row = "";
 		for(let k = 0; k < util.types.length; k++) {
-		    content += `,${matchups[util.types[k]]}`;
+		    const tk = util.types[k];
+		    row += `,${matchups[tk]}`;
 		    for(let l = k+1; l < util.types.length; l++) {
-			const tkl_str = `${util.types[k]}/${util.types[l]}`;
-			content += `,${matchups[tkl_str]}`;
+			const tl = util.types[l];
+			const tkl_str = `${tk}/${tl}`;
+			row += `,${matchups[tkl_str]}`;
 		    }
 		}
+		lines.push(row);
+		totalScores.push(totalScore);
 	    }
+	}
+	const FACTOR = util.AVERAGE_SCORE / util.avg(totalScores);
+	for(let i = 0; i < lines.length; i++) {
+	    content += `\n${all_types[i]},${totalScores[i]*FACTOR}${lines[i]}`;
 	}
 	fs.writeFileSync(process.cwd() + "/" + outfile, content);
     });
