@@ -150,7 +150,9 @@ export function max(...args) {
     return args.reduce((a,b)=>(a<b)?(b):(a));
 }
 
-export default {types, pad, type_graph, type_adjlist, avg, min, max};
+export const AVERAGE_SCORE = 100;
+
+export default {types, pad, type_graph, type_adjlist, avg, min, max, AVERAGE_SCORE};
 
 //for testing only
 //console.log(type_adjlist());

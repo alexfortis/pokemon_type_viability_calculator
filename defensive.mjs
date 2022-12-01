@@ -26,12 +26,17 @@ Promise.all(util.types.map(get_move_data)).then((moves) => {
 	}
 	console.log(atks_times_pow);
 	var content = "type,def_score";
+	const all_types = [];
 	for(let i = 0; i < util.types.length; i++) {
 	    content += `,${util.types[i]}`;
+	    all_types.push(util.types[i]);
 	    for(let j = i+1; j < util.types.length; j++) {
 		content += `,${util.types[i]}/${util.types[j]}`;
+		all_types.push(`${util.types[i]}/${util.types[j]}`);
 	    }
 	}
+	const lines = [];
+	const totalScores = [];
 	//i, j for the defending type
 	for(let i = 0; i < util.types.length; i++) {
 	    const ti = util.types[i];
@@ -44,6 +49,7 @@ Promise.all(util.types.map(get_move_data)).then((moves) => {
 		//k, l for the attacking type
 		for(let k = 0; k < moves.length; k++) {
 		    const mk = moves[k];
+		    const mkt = (mk.type === "psychict")?("psychic"):(mk.type);
 		    for(let l = k; l < moves.length; l++) {
 			const ml = moves[l];
 			//type mk.type, ml.type
@@ -54,34 +60,38 @@ Promise.all(util.types.map(get_move_data)).then((moves) => {
 			    const e = single_type_graph[ti][mk.type].def * (i === j)?(1):(single_type_graph[tj][mk.type].def);
 			    const def_score_k = e * (atks_times_pow[mk.type].p * mk.physicalCount + atks_times_pow[mk.type].s * mk.specialCount) / (mk.physicalCount + mk.specialCount);
 			    //console.log(`Defensive score of ${type_str} against ${off_t_str} is ${def_score_k}`);
-			    def_score = def_score_k * mons.filter(mon => get_mons.isTypes(mon, mk.type)).length / mons.length;
+			    def_score = def_score_k * mons.filter(mon => get_mons.isTypes(mon, mkt)).length / mons.length;
 			}
 			else {
+			    const mlt = (ml.type === "psychict")?("psychic"):(ml.type);
 			    const ek = single_type_graph[ti][mk.type].def * (i === j)?(1):(single_type_graph[tj][mk.type].def);
 			    const def_score_k = ek * (atks_times_pow[mk.type].p * mk.physicalCount + atks_times_pow[mk.type].s * mk.specialCount) / (mk.physicalCount + mk.specialCount);
 			    const el = single_type_graph[ti][ml.type].def * (i === j)?(1):(single_type_graph[tj][ml.type].def);
 			    const def_score_l = el * (atks_times_pow[ml.type].p * ml.physicalCount + atks_times_pow[ml.type].s * ml.specialCount) / (ml.physicalCount + ml.specialCount);
 			    //console.log(`Defensive score of ${type_str} against ${off_t_str} is the max of ${def_score_k} (${mk.type}) and ${def_score_l} (${ml.type})`);
-			    def_score = util.max(def_score_k, def_score_l) * mons.filter(mon => get_mons.isTypes(mon, mk.type, ml.type)).length / mons.length;
+			    def_score = util.max(def_score_k, def_score_l) * mons.filter(mon => get_mons.isTypes(mon, mkt, mlt)).length / mons.length;
 			}
 			matchups[off_t_str] = def_score;
 			totalScore += def_score;
 		    }
 		}
-		//console.log(`Matchups for ${type_str} (total score: ${totalScore}):`);
-		content += `\n${type_str},${totalScore}`;
-		for(let k = 0; k < moves.length; k++) {
-		    const tk = moves[k].type;
-		    //console.log(`\t${tk}: ${matchups[tk]}`);
-		    content += `,${matchups[tk]}`;
-		    for(let l = k+1; l < moves.length; l++) {
-			const tl = moves[l].type;
-			const tkl_str = tk + "/" + tl;
-			//console.log(`\t${tkl_str}: ${matchups[tkl_str]}`);
-			content += `,${matchups[tkl_str]}`;
+		var row = "";
+		for(let k = 0; k < util.types.length; k++) {
+		    const tk = util.types[k];
+		    row += `,${matchups[tk]}`;
+		    for(let l = k+1; l < util.types.length; l++) {
+			const tl = util.types[l];
+			const tkl_str = `${tk}/${tl}`;
+			row += `,${matchups[tkl_str]}`;
 		    }
 		}
+		lines.push(row);
+		totalScores.push(totalScore);
 	    }
+	}
+	const FACTOR = util.AVERAGE_SCORE / util.avg(totalScores);
+	for(let i = 0; i < lines.length; i++) {
+	    content += `\n${all_types[i]},${totalScores[i]*FACTOR}${lines[i]}`;
 	}
 	fs.writeFileSync(process.cwd() + "/" + outfile, content);
     });
