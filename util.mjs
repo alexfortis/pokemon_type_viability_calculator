@@ -1,4 +1,4 @@
-export const types = ["bug", "dark", "dragon", "electric", "fairy", "fighting", "fire", "flying", "ghost", "grass", "ground", "ice", "normal", "poison", "psychict", "rock", "steel", "water"];
+export const types = ["bug", "dark", "dragon", "electric", "fairy", "fighting", "fire", "flying", "ghost", "grass", "ground", "ice", "normal", "poison", "psychic", "rock", "steel", "water"];
 
 export function pad(num, digits) {
     var str = num.toString();
@@ -47,7 +47,7 @@ export function type_graph() {
     addBatchEffectiveness(graph, "normal", no_e, ["ghost"]);
 
     addBatchEffectiveness(graph, "fighting", super_e, ["normal", "rock", "steel", "ice", "dark"]);
-    addBatchEffectiveness(graph, "fighting", notvery_e, ["flying", "poison", "bug", "psychict", "fairy"]);
+    addBatchEffectiveness(graph, "fighting", notvery_e, ["flying", "poison", "bug", "psychic", "fairy"]);
     addBatchEffectiveness(graph, "fighting", no_e, ["ghost"]);
     
     addBatchEffectiveness(graph, "flying", super_e, ["fighting", "bug", "grass"]);
@@ -64,10 +64,10 @@ export function type_graph() {
     addBatchEffectiveness(graph, "rock", super_e, ["flying", "bug", "fire", "ice"]);
     addBatchEffectiveness(graph, "rock", notvery_e, ["fighting", "ground", "steel"]);
 
-    addBatchEffectiveness(graph, "bug", super_e, ["grass", "psychict", "dark"]);
+    addBatchEffectiveness(graph, "bug", super_e, ["grass", "psychic", "dark"]);
     addBatchEffectiveness(graph, "bug", notvery_e, ["fighting", "flying", "poison", "ghost", "steel", "fire", "fairy"]);
 
-    addBatchEffectiveness(graph, "ghost", super_e, ["ghost", "psychict"]);
+    addBatchEffectiveness(graph, "ghost", super_e, ["ghost", "psychic"]);
     addBatchEffectiveness(graph, "ghost", notvery_e, ["dark"]);
     addBatchEffectiveness(graph, "ghost", no_e, ["normal"]);
 
@@ -87,9 +87,9 @@ export function type_graph() {
     addBatchEffectiveness(graph, "electric", notvery_e, ["grass", "electric", "dragon"]);
     addBatchEffectiveness(graph, "electric", no_e, ["ground"]);
 
-    addBatchEffectiveness(graph, "psychict", super_e, ["fighting", "poison"]);
-    addBatchEffectiveness(graph, "psychict", notvery_e, ["steel", "psychict"]);
-    addBatchEffectiveness(graph, "psychict", no_e, ["dark"]);
+    addBatchEffectiveness(graph, "psychic", super_e, ["fighting", "poison"]);
+    addBatchEffectiveness(graph, "psychic", notvery_e, ["steel", "psychic"]);
+    addBatchEffectiveness(graph, "psychic", no_e, ["dark"]);
 
     addBatchEffectiveness(graph, "ice", super_e, ["flying", "ground", "grass", "dragon"]);
     addBatchEffectiveness(graph, "ice", notvery_e, ["steel", "fire", "water", "ice"]);
@@ -98,7 +98,7 @@ export function type_graph() {
     addBatchEffectiveness(graph, "dragon", notvery_e, ["steel"]);
     addBatchEffectiveness(graph, "dragon", no_e, ["fairy"]);
 
-    addBatchEffectiveness(graph, "dark", super_e, ["ghost", "psychict"]);
+    addBatchEffectiveness(graph, "dark", super_e, ["ghost", "psychic"]);
     addBatchEffectiveness(graph, "dark", notvery_e, ["fighting", "dark", "fairy"]);
 
     addBatchEffectiveness(graph, "fairy", super_e, ["fighting", "dragon", "dark"]);
@@ -150,9 +150,20 @@ export function max(...args) {
     return args.reduce((a,b)=>(a<b)?(b):(a));
 }
 
+export function wait(time_ms) {
+    return new Promise(resolve => setTimeout(resolve, time_ms));
+}
+
 export const AVERAGE_SCORE = 100;
 
-export default {types, pad, type_graph, type_adjlist, avg, min, max, AVERAGE_SCORE};
+export function fetch_retry(n, url, options) {
+    return fetch(url, options).catch(error => {
+	if(n < 1) throw error;
+	return fetch_retry(n-1, url, options);
+    });
+}
+
+export default {types, pad, type_graph, type_adjlist, avg, min, max, wait, AVERAGE_SCORE, fetch_retry};
 
 //for testing only
 //console.log(type_adjlist());

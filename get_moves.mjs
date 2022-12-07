@@ -14,10 +14,11 @@ export class MoveCount {
 
 export async function get_move_data(type)
 {
+    const typeForURL = (type === "psychic")?("psychict"):(type);
     var physicalSum = 0, physicalCount = 0, specialSum = 0, specialCount = 0;
-    const url = `https://www.serebii.net/attackdex-swsh/${type}.shtml`;
+    const url = `https://www.serebii.net/attackdex-sv/${typeForURL}.shtml`;
     console.log("Fetching from " + url);
-    const resp = await fetch(url);
+    const resp = await util.fetch_retry(3, url);
     const html = await resp.text();
     const doc = new JSDOM(html);
     const tables = doc.window.document.getElementsByClassName("dextable");
