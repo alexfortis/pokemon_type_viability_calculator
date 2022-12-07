@@ -9,7 +9,7 @@ Promise.all(util.types.map(get_move_data)).then((moves) => {
     const single_type_graph = util.type_adjlist();
     get_mons.get_mons().then(mons => {
 	//start the content buffer to be written to outfile
-	var content = "type, off_score";
+	var content = "type,norm_off_score,raw_off_score";
 	//get the average physical and special defense stats for all mons
 	const avg_phys_def = util.avg(mons.map(mon => mon.def)),
 	      avg_spec_def = util.avg(mons.map(mon => mon.sdef));
@@ -84,7 +84,7 @@ Promise.all(util.types.map(get_move_data)).then((moves) => {
 	console.log(allMatchups);
 	const FACTOR = util.AVERAGE_SCORE / util.avg(totalScores);
 	for(const type in allMatchups) {
-	    content += `\n${type},${allMatchups[type].totalScore*FACTOR}`;
+	    content += `\n${type},${allMatchups[type].totalScore*FACTOR},${allMatchups[type].totalScore}`;
 	    for(const matchup in allMatchups[type].matchups) {
 		content += `,${allMatchups[type].matchups[matchup]}`;
 	    }

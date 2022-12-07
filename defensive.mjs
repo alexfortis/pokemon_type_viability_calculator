@@ -13,7 +13,7 @@ Promise.all(util.types.map(get_move_data)).then((moves) => {
 	const avg_atks = {};
 	//get the average physical and special attack stats for each type
 	//also start the content buffer
-	var content = "type,def_score";
+	var content = "type,norm_def_score,raw_def_score";
 	for(let i = 0; i < util.types.length; i++) {
 	    const ti = util.types[i];
 	    const mons_ti = mons.filter(mon => get_mons.isTypes(mon, ti));
@@ -82,7 +82,7 @@ Promise.all(util.types.map(get_move_data)).then((moves) => {
 	}
 	const FACTOR = util.AVERAGE_SCORE / util.avg(totalScores);
 	for(const type in allMatchups) {
-	    content += `\n${type},${allMatchups[type].totalScore*FACTOR}`;
+	    content += `\n${type},${allMatchups[type].totalScore*FACTOR},${allMatchups[type].totalScore}`;
 	    for(const matchup in allMatchups[type].matchups) {
 		content += `,${allMatchups[type].matchups[matchup]}`;
 	    }
