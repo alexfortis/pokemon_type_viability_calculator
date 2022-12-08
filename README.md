@@ -22,7 +22,7 @@ Defensive and offensive scores have been calculated. Check the rankings [here](h
 Notes:
 - All defensive and offensive scores are adjusted so the average is 100. Both the raw score and normalized score are placed in the spreadsheet.
 - A lower defensive score is better, and a higher offensive score is better.
-- Stronger and more common types with more powerful attacking moves are weighted more heavily than weaker and less common types with weaker attacking moves.
+- Stronger and more common types with more powerful and accurate attacking moves are weighted more heavily than weaker and less common types with weaker and less accurate attacking moves.
 - As of the initial release of Pokémon Scarlet and Violet, which kicked off Generation 9, the following type combinations still have yet to be used:
     - Bug/Dragon
     - Bug/Normal
