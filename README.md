@@ -5,6 +5,19 @@ To algorithmically rank all Pokémon types from strongest to weakest based on ho
 - Scrape the data I need from wherever I can get it; [serebii.net](https://www.serebii.net) has it.
 - Data required: all moves of each type and category, all stats of all Pokémon (as of Generation 9).
 - Use the algorithm described below to analytically determine the type ranking.
+## Status
+Defensive and offensive scores have been calculated. Check the rankings [here](https://docs.google.com/spreadsheets/d/1CchFpgJfxQf41MJu8qzS33wpiEW8g-63T_OSOu_cqrQ/).
+## Results Summary
+- Defensive:
+    - The best defensive types seem to be Ghost, Dark, and Ground.
+    - The worst defensive types seem to be anything paired with Rock, except Water, Steel, and Rock itself.
+- Offensive:
+    - The best offensive types seem to be Electric/Fire and Fire/Grass, with Fire/Ghost, Fire/Psychic, Fighting/Fire, Fire/Ground, and Electric/Fighting not far behind.
+    - The worst offensive type seems to be Poison, with Bug and Normal not much better.
+- Overall:
+    - The top two types are Fire/Steel and Fire/Ghost and the third is Electric/Steel, no matter which way they're combined. By quotient, Fire/Steel is the best, but by difference, Fire/Ghost is the best. No other type is really close to those three, but Ghost/Steel, Fighting/Steel, Ground/Steel, Fighting/Ghost, Electric/Fire, and Electric/Ghost are also pretty good.
+    - By quotient, the worst types are Poison and Normal/Rock, with Poison/Rock not much better. Bug/Ice, Bug/Poison, Bug/Rock, Ice/Rock, and Flying/Rock are also pretty bad.
+    - By difference, the worst types are Normal/Rock and Poison/Rock. Bug/Rock, Ice/Rock, Bug/Ice, and Flying/Rock are also pretty bad.
 ## Algorithm
 Notes:
 - All defensive and offensive scores are adjusted so the average is 100. Both the raw score and normalized score are placed in the spreadsheet.
@@ -64,17 +77,3 @@ Notes:
     - totalScore is now the total offensive score for type T. Store it and save it for later.
 ### Combining
 It's unclear which is better: offensive/defensive or offensive-defensive. Therefore, both are calculated and placed in the [spreadsheet](https://docs.google.com/spreadsheets/d/1CchFpgJfxQf41MJu8qzS33wpiEW8g-63T_OSOu_cqrQ/), as the quotient total and difference total respectively.
-## Status
-Defensive and offensive scores have been calculated. Check the rankings [here](https://docs.google.com/spreadsheets/d/1CchFpgJfxQf41MJu8qzS33wpiEW8g-63T_OSOu_cqrQ/).
-## Results Summary
-- Defensive:
-    - The best defensive types seem to be Ghost, Dark, and Ground.
-    - The worst defensive types seem to be anything paired with Rock, except Water, Steel, and Rock itself.
-- Offensive:
-    - The best offensive types seem to be Electric/Fire and Fire/Grass, with Fire/Ghost, Fire/Psychic, Fighting/Fire, Fire/Ground, and Electric/Fighting not far behind.
-    - The worst offensive type seems to be Poison, with Bug and Normal not much better.
-- Overall:
-    - The top two types are Fire/Steel and Fire/Ghost and the third is Electric/Steel, no matter which way they're combined. By quotient, Fire/Steel is the best, but by difference, Fire/Ghost is the best. No other type is really close to those three, but Ghost/Steel, Fighting/Steel, Ground/Steel, Fighting/Ghost, Electric/Fire, and Electric/Ghost are also pretty good.
-    - By quotient, the worst types are Poison and Normal/Rock, with Poison/Rock not much better. Bug/Ice, Bug/Poison, Bug/Rock, Ice/Rock, and Flying/Rock are also pretty bad.
-    - By difference, the worst types are Normal/Rock and Poison/Rock. Bug/Rock, Ice/Rock, Bug/Ice, and Flying/Rock are also pretty bad.
-    
