@@ -62,13 +62,13 @@ Promise.all(util.types.map(get_move_data)).then((moves) => {
 			const def_type_str = (k === l)?(tk):(`${tk}/${tl}`);
 			var off_score = 0;
 			if(i === j) {
-			    const ei = single_type_graph[ti][tk].off * (k === l)?(1):(single_type_graph[ti][tl].off);
+			    const ei = single_type_graph[ti][tk].off * ((k === l)?(1):(single_type_graph[ti][tl].off));
 			    const off_score_i = ei * (mi.physicalCount * mi.physical * avg_defs[def_type_str].physical/avg_phys_def + mi.specialCount * mi.special * avg_defs[def_type_str].special/avg_spec_def) / (mi.physicalCount + mi.specialCount);
 			    off_score = off_score_i * avg_defs[def_type_str].count/mons.length;
 			}
 			else {
-			    const ei = single_type_graph[ti][tk].off * (k === l)?(1):(single_type_graph[ti][tl].off),
-				  ej = single_type_graph[tj][tk].off * (k === l)?(1):(single_type_graph[tj][tl].off);
+			    const ei = single_type_graph[ti][tk].off * ((k === l)?(1):(single_type_graph[ti][tl].off)),
+				  ej = single_type_graph[tj][tk].off * ((k === l)?(1):(single_type_graph[tj][tl].off));
 			    const off_score_i = ei * (mi.physicalCount * mi.physical * avg_defs[def_type_str].physical/avg_phys_def + mi.specialCount * mi.special * avg_defs[def_type_str].special/avg_spec_def) / (mi.physicalCount + mi.specialCount),
 				  off_score_j = ej * (mj.physicalCount * mj.physical * avg_defs[def_type_str].physical/avg_phys_def + mj.specialCount * mj.special * avg_defs[def_type_str].special/avg_spec_def) / (mj.physicalCount + mj.specialCount);
 			    off_score = util.max(off_score_i, off_score_j) * avg_defs[def_type_str].count/mons.length;

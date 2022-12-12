@@ -56,14 +56,14 @@ Promise.all(util.types.map(get_move_data)).then((moves) => {
 			    var def_score = 0;
 			    //monotype mk.type
 			    if(k === l) {
-				const e = single_type_graph[ti][mk.type].def * (i === j)?(1):(single_type_graph[tj][mk.type].def);
+				const e = single_type_graph[ti][mk.type].def * ((i === j)?(1):(single_type_graph[tj][mk.type].def));
 				const def_score_k = e * (mk.physical * avg_atks[off_type_str].physical/avg_phys_atk * mk.physicalCount + mk.special * avg_atks[off_type_str].special/avg_spec_atk * mk.specialCount) / (mk.physicalCount + mk.specialCount);
 				def_score = def_score_k * avg_atks[off_type_str].count / mons.length;
 			    }
 			    //type mk.type, ml.type
 			    else {
-				const ek = single_type_graph[ti][mk.type].def * (i === j)?(1):(single_type_graph[tj][mk.type].def),
-				      el = single_type_graph[ti][ml.type].def * (i === j)?(1):(single_type_graph[tj][ml.type].def);
+				const ek = single_type_graph[ti][mk.type].def * ((i === j)?(1):(single_type_graph[tj][mk.type].def)),
+				      el = single_type_graph[ti][ml.type].def * ((i === j)?(1):(single_type_graph[tj][ml.type].def));
 				const def_score_k = ek * (mk.physical * avg_atks[off_type_str].physical/avg_phys_atk * mk.physicalCount + mk.special * avg_atks[off_type_str].special/avg_spec_atk * mk.specialCount) / (mk.physicalCount + mk.specialCount),
 				      def_score_l = el * (ml.physical * avg_atks[off_type_str].physical/avg_phys_atk * ml.physicalCount + ml.special * avg_atks[off_type_str].special/avg_spec_atk * ml.specialCount) / (ml.physicalCount + ml.specialCount);
 				def_score = util.max(def_score_k, def_score_l) * avg_atks[off_type_str].count / mons.length;

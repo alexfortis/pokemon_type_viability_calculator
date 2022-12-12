@@ -381,9 +381,8 @@ export async function get_mons() {
 export default {MonData, isType, isTypes, get_mons};
 
 //for testing only
-/*
 get_mons().then(mons => {
     for(const mon of mons) {
 	console.log(mon.toString());
     }
-});*/
+});
