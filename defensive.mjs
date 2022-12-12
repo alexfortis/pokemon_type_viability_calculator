@@ -88,5 +88,6 @@ Promise.all(util.types.map(get_move_data)).then((moves) => {
 	    }
 	}
 	fs.writeFileSync(process.cwd() + "/" + outfile, content);
+	console.log(`Wrote defensive scores to ${outfile}`);
     });
 });
