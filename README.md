@@ -9,15 +9,20 @@ To algorithmically rank all Pokémon types from strongest to weakest based on ho
 Defensive and offensive scores have been calculated. Check the rankings [here](https://docs.google.com/spreadsheets/d/1CchFpgJfxQf41MJu8qzS33wpiEW8g-63T_OSOu_cqrQ/).
 ## Results Summary
 - Defensive:
-    - The best defensive types seem to be Ghost, Dark, and Ground.
-    - The worst defensive types seem to be anything paired with Rock, except Water, Steel, and Rock itself.
+    - The best defensive type is dragon/steel, with dark/ghost and fairy/steel not far behind. Other good defensive types include flying/steel, ghost/normal, dark/poison, ghost/steel, and steel/water.
+    - The best defensive single type is steel; electric and ghost are not much worse.
+    - The worst defensive type is ground/rock, with ice/rock being the only other type anywhere close.
+    - The worst defensive single type is rock.
 - Offensive:
-    - The best offensive types seem to be Electric/Fire and Fire/Grass, with Fire/Ghost, Fire/Psychic, Fighting/Fire, Fire/Ground, and Electric/Fighting not far behind.
-    - The worst offensive type seems to be Poison, with Bug and Normal not much better.
+    - The best offensive type is electric/fire, with fire/ground not far behind, and fighting/fire, fire/grass, and fairy/fire not far behind that.
+    - The best offensive single type is fire.
+    - The worst offensive type is normal, followed closely by poison and bug.
+    - The worst offensive dual type is normal/poison, which is also fourth worst overall.
 - Overall:
-    - The top two types are Fire/Steel and Fire/Ghost and the third is Electric/Steel, no matter which way they're combined. By quotient, Fire/Steel is the best, but by difference, Fire/Ghost is the best. No other type is really close to those three, but Ghost/Steel, Fighting/Steel, Ground/Steel, Fighting/Ghost, Electric/Fire, and Electric/Ghost are also pretty good.
-    - By quotient, the worst types are Poison and Normal/Rock, with Poison/Rock not much better. Bug/Ice, Bug/Poison, Bug/Rock, Ice/Rock, and Flying/Rock are also pretty bad.
-    - By difference, the worst types are Normal/Rock and Poison/Rock. Bug/Rock, Ice/Rock, Bug/Ice, and Flying/Rock are also pretty bad.
+    - Whether by quotient or by difference, the best type is fairy/steel.
+    - Whether by quotient or by difference, the next ten types (in alphabetical order) are dragon/fire, dragon/steel, electric/fairy, electric/ghost, fairy/fire, fairy/ghost, fire/ghost, fire/grass, flying/steel, and ghost/steel.
+    - By quotient, the worst type is bug, followed closely by poison and normal. The worst dual types are bug/grass, bug/ice, and bug/poison, which are the fourth through sixth worst types overall.
+    - By difference, the worst types are bug/grass and bug/ice, followed somewhat closely by bug, ice/rock, and ground/rock.
 ## Algorithm
 Notes:
 - All defensive and offensive scores are adjusted so the average is 100. Both the raw score and normalized score are placed in the spreadsheet.
