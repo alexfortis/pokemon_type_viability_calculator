@@ -5,6 +5,8 @@ import fs from "fs";
 
 const outfile = "offensive_scores.csv";
 
+const VERBOSE = false;
+
 Promise.all(util.types.map(get_move_data)).then((moves) => {
     const single_type_graph = util.type_adjlist();
     get_mons.get_mons().then(mons => {
@@ -81,7 +83,9 @@ Promise.all(util.types.map(get_move_data)).then((moves) => {
 		allMatchups[off_type_str] = {totalScore, matchups};
 	    }
 	}
-	console.log(allMatchups);
+	if(VERBOSE) {
+	    console.log(allMatchups);
+	}
 	const FACTOR = util.AVERAGE_SCORE / util.avg(totalScores);
 	for(const type in allMatchups) {
 	    content += `\n${type},${allMatchups[type].totalScore*FACTOR},${allMatchups[type].totalScore}`;

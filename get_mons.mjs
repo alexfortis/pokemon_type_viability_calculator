@@ -6,6 +6,8 @@ const JSDOM = jsdom.JSDOM;
 const url = "https://www.serebii.net/pokemon/nationalpokedex.shtml";
 const dexfile = "pokedex.txt"
 
+const VERBOSE = false;
+
 export class MonData {
     constructor(num, name, t1, t2, hp, att, def, satt, sdef, spd) {
 	this.num = num;
@@ -71,7 +73,9 @@ function parse_mon_data(table_row) {
 }
 
 async function scrape_alt_forms(serebii_url, altForms) {
-    console.log(`Fetching alternate forms from ${serebii_url}`);
+    if(VERBOSE) {
+	console.log(`Fetching alternate forms from ${serebii_url}`);
+    }
     const resp = await fetch(serebii_url);
     if(resp.status === 200) {
 	//process the document
@@ -322,9 +326,13 @@ async function scrape_mons() {
     const table = doc.window.document.getElementsByClassName("dextable")[0];
     const rows = Array.prototype.slice.call(table.getElementsByTagName("tbody")[0].children, 2);
     const mons = rows.map(parse_mon_data);
-    console.log("Need to wait a bit to avoid getting refused by the server");
+    if(VERBOSE) {
+	console.log("Need to wait a bit to avoid getting refused by the server");
+    }
     await util.wait(10000);
-    console.log("I think that's enough waiting; time to get alternate forms now");
+    if(VERBOSE) {
+	console.log("I think that's enough waiting; time to get alternate forms now");
+    }
     const allAltForms = [];
     for(const mon of mons) {
 	const alternateForms = {};
@@ -381,8 +389,10 @@ export async function get_mons() {
 export default {MonData, isType, isTypes, get_mons};
 
 //for testing only
+/*
 get_mons().then(mons => {
     for(const mon of mons) {
 	console.log(mon.toString());
     }
 });
+*/

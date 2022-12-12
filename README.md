@@ -6,7 +6,7 @@ To algorithmically rank all Pokémon types from strongest to weakest based on ho
 - If you want to download and run the code for yourself:
     - Ensure you have [Node.js](https://nodejs.org/) v18 or later installed properly. Not tested on v19.
     - Clone the repository like you would any other.
-    - From your terminal, run `node defensive.mjs` to get the defensive scores and `node offensive.mjs` to get the offensive scores. You will likely want to forward the output to another file (preferably starting with the word "output" so it gets ignored by git) or pipe it to `less` to avoid stuff you don't necessarily need to see getting written to your console.
+    - From your terminal, run `node defensive.mjs` to get the defensive scores and `node offensive.mjs` to get the offensive scores.
 ## Methodology
 - Scrape the data I need from wherever I can get it; [serebii.net](https://www.serebii.net) has it.
 - Data required: all moves of each type and category, all stats of all Pokémon (as of Generation 9).
