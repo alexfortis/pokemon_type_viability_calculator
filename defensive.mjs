@@ -5,8 +5,13 @@ import fs from "fs";
 
 const outfile = "defensive_scores.csv";
 
+const VERBOSE = false;
+
 Promise.all(util.types.map(get_move_data)).then((moves) => {
     const single_type_graph = util.type_adjlist();
+    if(VERBOSE) {
+	console.log(moves);
+    }
     get_mons.get_mons().then((mons) => {
 	const avg_phys_atk = util.avg(mons.map(mon => mon.att)),
 	      avg_spec_atk = util.avg(mons.map(mon => mon.satt));
@@ -46,12 +51,18 @@ Promise.all(util.types.map(get_move_data)).then((moves) => {
 		const def_type_str = (i === j)?(ti):(`${ti}/${tj}`);
 		const matchups = {};
 		var totalScore = 0;
+		if(VERBOSE) {
+		    console.log(`Calculating defensive scores for ${def_type_str}.`);
+		}
 		//k, l for the attacking type
 		for(let k = 0; k < moves.length; k++) {
 		    const mk = moves[k];
 		    for(let l = k; l < moves.length; l++) {
 			const ml = moves[l];
 			const off_type_str = (k === l)?(mk.type):(`${mk.type}/${ml.type}`);
+			if(VERBOSE) {
+			    console.log(`\tOffensive type is ${off_type_str}. avg_atks[${off_type_str}]: ${JSON.stringify(avg_atks[off_type_str])}.`);
+			}
 			if(avg_atks[off_type_str].count > 0) {
 			    var def_score = 0;
 			    //monotype mk.type

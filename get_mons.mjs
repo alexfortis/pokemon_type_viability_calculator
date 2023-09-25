@@ -10,16 +10,16 @@ const VERBOSE = false;
 
 export class MonData {
     constructor(num, name, t1, t2, hp, att, def, satt, sdef, spd) {
-	this.num = num;
+	this.num = parseInt(num);
 	this.name = name;
 	this.t1 = t1;
 	this.t2 = t2;
-	this.hp = hp;
-	this.att = att;
-	this.def = def;
-	this.satt = satt;
-	this.sdef = sdef;
-	this.spd = spd;
+	this.hp = parseInt(hp);
+	this.att = parseInt(att);
+	this.def = parseInt(def);
+	this.satt = parseInt(satt);
+	this.sdef = parseInt(sdef);
+	this.spd = parseInt(spd);
     }
     toString() {
 	return this.num + " " + this.name + " " + this.t1 +
@@ -326,15 +326,19 @@ async function scrape_mons() {
     const table = doc.window.document.getElementsByClassName("dextable")[0];
     const rows = Array.prototype.slice.call(table.getElementsByTagName("tbody")[0].children, 2);
     const mons = rows.map(parse_mon_data);
+    //console.log(mons);
     if(VERBOSE) {
 	console.log("Need to wait a bit to avoid getting refused by the server");
     }
-    await util.wait(10000);
+    await util.wait(15000);
     if(VERBOSE) {
 	console.log("I think that's enough waiting; time to get alternate forms now");
     }
     const allAltForms = [];
     for(const mon of mons) {
+	if(mon.num % 50 === 1 && 0 < mon.num) {
+	    console.log(`Checked ${mon.num-1} out of ${mons.length} species`);
+	}
 	const alternateForms = {};
 	//gen 7
 	if(0 < mon.num && mon.num < 810) {
@@ -353,6 +357,7 @@ async function scrape_mons() {
 	    allAltForms.push(alternateForms[altform]);
 	}
     }
+    console.log(`Got all ${allAltForms.length} alternate forms`);
     for(const altform of allAltForms) {
 	mons.push(altform);
     }
