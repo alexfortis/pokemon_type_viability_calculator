@@ -46,13 +46,13 @@ Defensive and offensive scores have been calculated. No known bugs or issues.
 - Offensive:
     - The best offensive type is Electric/Fire, with Fire/Ground not far behind, and Fighting/Fire, Fire/Grass, and Fairy/Fire not far behind that.
     - The best offensive single type is Fire.
-    - The worst offensive type is Normal, followed closely by Poison and Bug.
+    - The worst offensive type is Poison, followed closely by Normal and Bug.
     - The worst offensive dual type is Normal/Poison, which is also fourth worst overall.
 - Overall:
     - Whether by quotient or by difference, the best type is Fairy/Steel.
     - Whether by quotient or by difference, the next ten types (in alphabetical order) are Dragon/Fire, Dragon/Steel, Electric/Fairy, Electric/Ghost, Fairy/Fire, Fairy/Ghost, Fire/Ghost, Fire/Grass, Flying/Steel, and Ghost/Steel.
     - By quotient, the worst type is Bug, followed closely by Poison and Normal. The worst dual types are Bug/Grass, Bug/Ice, and Bug/Poison, which are the fourth through sixth worst types overall.
-    - By difference, the worst types are Bug/Grass and Bug/Ice, followed somewhat closely by Bug, Ice/Rock, and Ground/Rock.
+    - By difference, the worst type is Bug/Grass, followed by Bug/Ice and Ground/Rock. The next two types, Ice/Rock and Bug, also get (dis)honorable mentions here.
 ## Algorithm
 Notes:
 - All defensive and offensive scores are adjusted so the average is 100. Both the raw score and normalized score are placed in the spreadsheet.
